@@ -34,6 +34,9 @@ body{font-family:'Bai Jamjuree','Segoe UI',sans-serif;font-size:15.5px;backgroun
 .header-top{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;flex-wrap:wrap;position:relative;z-index:1;}
 .dashboard-header h1{font-size:26px;font-weight:700;margin-bottom:8px;max-width:820px;}
 .dashboard-header p{font-size:14.5px;color:rgba(255,255,255,.72);max-width:820px;}
+.doc-link{display:inline-flex;align-items:center;gap:7px;margin-top:12px;padding:8px 14px;border-radius:20px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.22);color:#fff;font-size:13px;font-weight:500;text-decoration:none;transition:.15s;}
+.doc-link:hover{background:rgba(255,255,255,.2);}
+.doc-link svg{width:15px;height:15px;flex-shrink:0;}
 .sync-panel{display:flex;flex-direction:column;align-items:flex-end;gap:8px;font-size:12.5px;color:rgba(255,255,255,.75);}
 .sync-status{display:flex;align-items:center;gap:7px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);padding:7px 13px;border-radius:20px;backdrop-filter:blur(6px);}
 .sync-dot{width:8px;height:8px;border-radius:50%;background:#9ca3af;flex-shrink:0;}
@@ -130,6 +133,11 @@ body{font-family:'Bai Jamjuree','Segoe UI',sans-serif;font-size:15.5px;backgroun
 .result-badge.ไม่ละเมิด{background:var(--success-soft);color:var(--success);}
 .result-badge.ยุติเรื่อง{background:var(--neutral-soft);color:#4b5563;}
 .result-badge.อื่นๆ{background:#dbeafe;color:var(--blue);}
+.type-badge{font-size:11.5px;font-weight:700;padding:3px 10px;border-radius:20px;white-space:nowrap;background:#ede9fe;color:var(--accent-dark);}
+.type-badge.basic{background:#dbeafe;color:var(--blue);}
+a.case-card.research-link{display:block;padding:16px 18px;color:inherit;text-decoration:none;cursor:pointer;}
+.report-link-hint{margin-top:12px;padding-top:10px;border-top:1px dashed var(--border);font-size:12.5px;font-weight:700;color:var(--accent-dark);}
+a.case-card.research-link:hover .report-link-hint{text-decoration:underline;}
 .case-card h5{font-size:14.5px;font-weight:600;line-height:1.5;margin-bottom:8px;padding-right:22px;}
 .case-meta{display:flex;flex-wrap:wrap;gap:8px;font-size:12.5px;color:var(--text-secondary);}
 .case-meta span{display:inline-flex;align-items:center;gap:4px;background:#fff;border:1px solid var(--border);padding:3px 9px;border-radius:20px;}
@@ -189,6 +197,10 @@ body{font-family:'Bai Jamjuree','Segoe UI',sans-serif;font-size:15.5px;backgroun
       <div>
         <h1>โจทย์วิจัยเชิงยุทธศาสตร์ด้านสิทธิมนุษยชนสำหรับพื้นที่ภาคใต้</h1>
         <p>สังเคราะห์จากรายงานประเมินสถานการณ์สิทธิมนุษยชน (2564-2568) และรายงานผลการตรวจสอบการละเมิดสิทธิมนุษยชนของ กสม. (2563-2569) &middot; นำเสนอผู้บริหารสำนักงาน กสม.</p>
+        <a class="doc-link" href="https://docs.google.com/document/d/1XbtwMg4q8_kGu3BqEiuqJOt9r0KcgkvigsX7xy38sjE/edit?usp=sharing" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/><path d="M16 13H8"/><path d="M16 17H8"/><path d="M10 9H8"/></svg>
+          อ่านกรอบการวิจัยฉบับเต็ม (หลักการ เหตุผล ระเบียบวิธี)
+        </a>
       </div>
       <div class="sync-panel">
         <div class="sync-status"><span class="sync-dot" id="syncDot"></span><span id="syncText">ยังไม่ได้ซิงก์ข้อมูลสด</span></div>
@@ -214,6 +226,7 @@ body{font-family:'Bai Jamjuree','Segoe UI',sans-serif;font-size:15.5px;backgroun
     <button class="tab-btn active" data-tab="overview" onclick="app.switchTab('overview')">โจทย์วิจัย <span class="live-dot"></span></button>
     <button class="tab-btn" data-tab="cases" onclick="app.switchTab('cases')">ฐานข้อมูลกรณีตรวจสอบ <span class="live-dot"></span></button>
     <button class="tab-btn" data-tab="matrix" onclick="app.switchTab('matrix')">สถานการณ์สิทธิมนุษยชนรายประเด็น <span class="live-dot"></span></button>
+    <button class="tab-btn" data-tab="research" onclick="app.switchTab('research')">งานวิจัยของ กสม. <span class="live-dot"></span></button>
   </nav>
 
   <!-- ===================== TAB 1: OVERVIEW ===================== -->
@@ -250,7 +263,7 @@ body{font-family:'Bai Jamjuree','Segoe UI',sans-serif;font-size:15.5px;backgroun
 
     <section class="chart-row">
       <div class="chart-container">
-        <h3>จำนวนกรณีแยกตามจังหวัด (10 อันดับแรก)</h3>
+        <h3>จำนวนกรณีแยกตามจังหวัดทั่วประเทศ (10 อันดับแรก)</h3>
         <canvas id="provinceChart"></canvas>
       </div>
       <div class="chart-container">
@@ -314,15 +327,55 @@ body{font-family:'Bai Jamjuree','Segoe UI',sans-serif;font-size:15.5px;backgroun
     </section>
   </section>
 
+  <!-- ===================== TAB 4: RESEARCH DASHBOARD (LIVE) ===================== -->
+  <section class="tab-panel" id="tab-research">
+    <div id="research-sync-banner"></div>
+    <section class="kpi-row">
+      <div class="kpi-card c-blue"><div class="kpi-label">งานวิจัยทั้งหมด<span class="kpi-live-tag" id="tag-research">สด</span></div><div class="kpi-value" id="kr-total">-</div><div class="kpi-sub" id="kr-year-range">กำลังโหลด...</div></div>
+      <div class="kpi-card c-pink"><div class="kpi-label">ประเด็นสิทธิที่ครอบคลุม</div><div class="kpi-value" id="kr-issues">-</div><div class="kpi-sub">จากการจัดหมวดหมู่ในฐานข้อมูล</div></div>
+      <div class="kpi-card c-amber"><div class="kpi-label">วิจัยประยุกต์</div><div class="kpi-value" id="kr-applied">-</div><div class="kpi-sub" id="kr-applied-pct">คิดเป็นสัดส่วน -</div></div>
+      <div class="kpi-card c-success"><div class="kpi-label">วิจัยพื้นฐาน</div><div class="kpi-value" id="kr-basic">-</div><div class="kpi-sub" id="kr-basic-pct">คิดเป็นสัดส่วน -</div></div>
+    </section>
+
+    <section class="chart-row">
+      <div class="chart-container">
+        <h3>จำนวนงานวิจัยแยกตามประเด็นสิทธิ (10 อันดับแรก)</h3>
+        <canvas id="researchIssueChart"></canvas>
+      </div>
+      <div class="chart-container">
+        <h3>แนวโน้มจำนวนงานวิจัยรายปี</h3>
+        <canvas id="researchYearChart"></canvas>
+      </div>
+    </section>
+
+    <section class="cards-section">
+      <h3>ฐานข้อมูลงานวิจัยของ กสม.</h3>
+      <div class="toolbar">
+        <select id="research-year" onchange="researchExplorer.applyFilters()"><option value="all">ทุกปี</option></select>
+        <select id="research-issue" onchange="researchExplorer.applyFilters()"><option value="all">ทุกประเด็นสิทธิ</option></select>
+        <select id="research-type" onchange="researchExplorer.applyFilters()"><option value="all">ทุกประเภทงานวิจัย</option></select>
+        <input type="text" class="search-box" id="research-search" placeholder="ค้นหาชื่อเรื่อง ผู้จัดทำ คำสำคัญ..." oninput="researchExplorer.applyFilters()">
+      </div>
+      <div class="result-count" id="research-result-count" style="margin-bottom:2px;"></div>
+      <div class="result-count" style="margin-top:0;">* แก้ไข เพิ่ม หรือลบงานวิจัยได้โดยตรงที่ <a href="https://docs.google.com/spreadsheets/d/1kY1zEXHuacEon7heB861zLL7ULcuzvwt-xlwWAlM6Xs/edit?gid=2032252742#gid=2032252742" target="_blank" rel="noopener" style="color:var(--accent-dark);font-weight:600;">Google Sheet ฐานข้อมูลงานวิจัยของ กสม.</a> — หน้านี้จะอัปเดตตามอัตโนมัติ</div>
+      <div class="case-list" id="researchList"></div>
+      <div class="pagination" id="researchPagination"></div>
+    </section>
+  </section>
+
   <footer class="dashboard-footer">
     จัดทำเพื่อประกอบการพิจารณาแผนงานวิจัยประจำปีของสำนักงาน กสม. — ทุกแท็บซิงก์สดจาก Google Sheets โดยตรง
     <div class="src-links">
       แหล่งข้อมูล:
+      <a href="https://docs.google.com/document/d/1XbtwMg4q8_kGu3BqEiuqJOt9r0KcgkvigsX7xy38sjE/edit" target="_blank" rel="noopener">กรอบการวิจัยฉบับเต็ม</a>
+      ·
       <a href="https://docs.google.com/spreadsheets/d/1oc-uDNnD7mgfBGb7F6cXQHhgP8u2WjU50XMHLXcK2MU/edit" target="_blank" rel="noopener">ฐานข้อมูลโจทย์วิจัย</a>
       ·
       <a href="https://docs.google.com/spreadsheets/d/14niCmVT6pRLGFjCvmLs4UIOHv2xIFDYZYItRceeEUiQ/edit" target="_blank" rel="noopener">ฐานข้อมูลกรณีตรวจสอบ กสม.</a>
       ·
       <a href="https://docs.google.com/spreadsheets/d/1AROYdrFmB0MC1lJkUJvA-vsPOaP76zvDbGa5X08RZDQ/edit" target="_blank" rel="noopener">ตารางประเมินสถานการณ์สิทธิมนุษยชน</a>
+      ·
+      <a href="https://docs.google.com/spreadsheets/d/1kY1zEXHuacEon7heB861zLL7ULcuzvwt-xlwWAlM6Xs/edit?gid=2032252742#gid=2032252742" target="_blank" rel="noopener">ฐานข้อมูลงานวิจัยของ กสม.</a>
     </div>
   </footer>
 </div>
@@ -334,13 +387,15 @@ body{font-family:'Bai Jamjuree','Segoe UI',sans-serif;font-size:15.5px;backgroun
 const SHEET_TOPICS_ID = '1oc-uDNnD7mgfBGb7F6cXQHhgP8u2WjU50XMHLXcK2MU';
 const SHEET_CASES_ID = '14niCmVT6pRLGFjCvmLs4UIOHv2xIFDYZYItRceeEUiQ';
 const SHEET_MATRIX_ID = '1AROYdrFmB0MC1lJkUJvA-vsPOaP76zvDbGa5X08RZDQ';
+const SHEET_RESEARCH_ID = '1kY1zEXHuacEon7heB861zLL7ULcuzvwt-xlwWAlM6Xs';
+const SHEET_RESEARCH_GID = '2032252742';
 const SOUTH_PROVINCES = ['ชุมพร','ระนอง','สุราษฎร์ธานี','พังงา','ภูเก็ต','กระบี่','นครศรีธรรมราช','ตรัง','พัทลุง','สตูล','สงขลา','ปัตตานี','ยะลา','นราธิวาส'];
 // ถ้อยคำที่ระบุ "ภาคใต้" ตรงๆ ในช่องพื้นที่ (เช่น ครอบคลุมหลายจังหวัดรวมภาคใต้ แต่ไม่ได้เอ่ยชื่อจังหวัดเจาะจง) ให้นับเป็นกรณีเกี่ยวข้องกับภาคใต้ด้วย
 const SOUTH_REGION_KEYWORDS = ['ภาคใต้','ชายแดนใต้'];
 const AUTO_REFRESH_MS = 5 * 60 * 1000;
 let __gvizSeq = 0;
 
-function loadGvizSheet(sheetId, onData, onError){
+function loadGvizSheet(sheetId, onData, onError, gid){
   const cbName = '__gvizCb' + (++__gvizSeq);
   const script = document.createElement('script');
   const timeoutId = setTimeout(()=>{ cleanup(); onError(new Error('หมดเวลาเชื่อมต่อ')); }, 15000);
@@ -361,8 +416,13 @@ function loadGvizSheet(sheetId, onData, onError){
     }catch(e){ cleanup(); onError(e); }
   };
   script.onerror = function(){ cleanup(); onError(new Error('ไม่สามารถเชื่อมต่ออินเทอร์เน็ต/Google Sheets ได้')); };
-  script.src = 'https://docs.google.com/spreadsheets/d/' + sheetId + '/gviz/tq?headers=1&tqx=out:json;responseHandler:' + cbName + '&gid=0&_t=' + Date.now();
+  script.src = 'https://docs.google.com/spreadsheets/d/' + sheetId + '/gviz/tq?headers=1&tqx=out:json;responseHandler:' + cbName + '&gid=' + (gid || 0) + '&_t=' + Date.now();
   document.head.appendChild(script);
+}
+function splitCommaList(s){
+  s = cleanText(s);
+  if(!s) return [];
+  return s.split(',').map(x=>x.trim()).filter(Boolean);
 }
 
 function cleanText(s){
@@ -431,7 +491,7 @@ const TREND_LABEL = {negative:'แนวโน้มลบ', positive:'แนว
 
 /* ---------- App controller: tab switching + sync orchestration ---------- */
 const app = {
-  loading: {cases:false, matrix:false, topics:false},
+  loading: {cases:false, matrix:false, topics:false, research:false},
   lastSync: null,
   switchTab(name){
     document.querySelectorAll('.tab-btn').forEach(b => b.classList.toggle('active', b.dataset.tab === name));
@@ -449,11 +509,12 @@ const app = {
   },
   refreshAll(manual){
     this.setSyncUI('loading');
-    let pending = 3;
-    const done = () => { pending--; if(pending === 0){ this.setSyncUI(this.loading.cases === 'error' || this.loading.matrix === 'error' || this.loading.topics === 'error' ? 'error' : 'ok'); } };
+    let pending = 4;
+    const done = () => { pending--; if(pending === 0){ this.setSyncUI(this.loading.cases === 'error' || this.loading.matrix === 'error' || this.loading.topics === 'error' || this.loading.research === 'error' ? 'error' : 'ok'); } };
     caseExplorer.load(() => { this.loading.cases = 'ok'; done(); }, () => { this.loading.cases = 'error'; done(); });
     matrixExplorer.load(() => { this.loading.matrix = 'ok'; done(); }, () => { this.loading.matrix = 'error'; done(); });
     topicsExplorer.load(() => { this.loading.topics = 'ok'; done(); }, () => { this.loading.topics = 'error'; done(); });
+    researchExplorer.load(() => { this.loading.research = 'ok'; done(); }, () => { this.loading.research = 'error'; done(); });
   },
   init(){
     this.refreshAll(false);
@@ -563,7 +624,7 @@ const topicsExplorer = {
         </div>
         <h4>${t.title}</h4>
         <div class="scope"><strong>ขอบเขตงาน:</strong> ${t.scope}</div>
-        <div class="evidence">${t.evidence ? '<strong>หลักฐานอ้างอิง:</strong> ' + t.evidence + '<br>' : ''}${t.missionLink ? '<strong>เชื่อมโยงภารกิจ:</strong> ' + t.missionLink : ''}</div>
+        <div class="evidence">${t.evidence ? '<strong>ผลผลิตที่คาดหวัง:</strong> ' + t.evidence + '<br>' : ''}${t.missionLink ? '<strong>เชื่อมโยงภารกิจ:</strong> ' + t.missionLink : ''}</div>
       </div>`;
     }).join('');
   }
@@ -573,7 +634,7 @@ const topicsExplorer = {
    TAB 2 — Case explorer (live: Sheet 1)
    ========================================================================= */
 const caseExplorer = {
-  all: [], filtered: [], page: 1, pageSize: 9, charts: {}, loaded: false,
+  all: [], filtered: [], filteredNationwide: [], page: 1, pageSize: 9, charts: {}, loaded: false,
 
   load(onDone, onErr){
     document.getElementById('cases-sync-banner').innerHTML = this.loaded ? '' :
@@ -642,14 +703,16 @@ const caseExplorer = {
     const issue = document.getElementById('case-issue').value;
     const result = document.getElementById('case-result').value;
     const q = document.getElementById('case-search').value.trim().toLowerCase();
-    this.filtered = this.all.filter(c => {
-      if(southOnly && !c.isSouth) return false;
+    const matchesCommonFilters = c => {
       if(year !== 'all' && c.year !== year) return false;
       if(issue !== 'all' && !c.issueTags.includes(issue)) return false;
       if(result !== 'all' && c.resultCategory !== result) return false;
       if(q && !(c.title.toLowerCase().includes(q) || c.area.toLowerCase().includes(q) || c.victims.toLowerCase().includes(q) || c.reportNo.toLowerCase().includes(q))) return false;
       return true;
-    });
+    };
+    this.filtered = this.all.filter(c => matchesCommonFilters(c) && (!southOnly || c.isSouth));
+    // จำนวนกรณีแยกตามจังหวัดต้องแสดงข้อมูลทั่วประเทศเสมอ ไม่ถูกจำกัดด้วยตัวกรอง "เฉพาะกรณีภาคใต้"
+    this.filteredNationwide = this.all.filter(matchesCommonFilters);
     this.page = 1;
     this.renderCharts();
     this.renderList();
@@ -657,7 +720,7 @@ const caseExplorer = {
 
   renderCharts(){
     const provinceCounts = {};
-    this.filtered.forEach(c => { const a = c.area || 'ไม่ระบุ'; provinceCounts[a] = (provinceCounts[a]||0)+1; });
+    this.filteredNationwide.forEach(c => { const a = c.area || 'ไม่ระบุ'; provinceCounts[a] = (provinceCounts[a]||0)+1; });
     const topProvinces = Object.entries(provinceCounts).sort((a,b)=>b[1]-a[1]).slice(0,10);
     const resultCounts = {'ละเมิด':0,'ไม่ละเมิด':0,'ยุติเรื่อง':0,'อื่นๆ':0};
     this.filtered.forEach(c => resultCounts[c.resultCategory]++);
@@ -877,6 +940,193 @@ const matrixExplorer = {
       </div>`;
     }).join('');
   }
+};
+
+/* =========================================================================
+   TAB 4 — Research dashboard explorer (live: ฐานข้อมูลงานวิจัยของ กสม.)
+   ========================================================================= */
+const researchExplorer = {
+  all: [], filtered: [], page: 1, pageSize: 9, charts: {}, loaded: false,
+
+  load(onDone, onErr){
+    document.getElementById('research-sync-banner').innerHTML = this.loaded ? '' :
+      '<div class="sync-banner loading">กำลังโหลดฐานข้อมูลงานวิจัยของ กสม. จาก Google Sheets…</div>';
+    loadGvizSheet(SHEET_RESEARCH_ID, (rows) => {
+      this.all = rows.map((r, i) => {
+        const title = cleanText(r[1]);
+        if(!title) return null;
+        return {
+          id: i,
+          year: cleanText(r[0]),
+          title,
+          issueTags: splitCommaList(r[2]).length ? splitCommaList(r[2]) : ['ไม่ระบุประเด็น'],
+          type: cleanText(r[3]) || 'ไม่ระบุประเภท',
+          author: cleanText(r[4]),
+          method: cleanText(r[5]),
+          methodology: cleanText(r[6]),
+          summary: cleanText(r[7]),
+          keywords: splitCommaList(r[8]),
+          reportUrl: /^https?:\/\//i.test(cleanText(r[9])) ? cleanText(r[9]) : ''
+        };
+      }).filter(Boolean).sort((a,b) => (Number(b.year)||0) - (Number(a.year)||0));
+      this.loaded = true;
+      document.getElementById('research-sync-banner').innerHTML = '';
+      this.setupFilterOptions();
+      this.applyFilters();
+      this.updateOverviewKPIs();
+      onDone();
+    }, (err) => {
+      document.getElementById('research-sync-banner').innerHTML =
+        '<div class="sync-banner error">ไม่สามารถซิงก์ฐานข้อมูลงานวิจัยสดได้ (' + (err.message||'') + ') — ตรวจสอบว่าชีตถูกแชร์เป็น "ทุกคนที่มีลิงก์ดูได้" แล้ว หรือตรวจสอบการเชื่อมต่ออินเทอร์เน็ต' +
+        '<button class="retry-btn" onclick="researchExplorer.load(function(){app.setSyncUI(\'ok\');}, function(){app.setSyncUI(\'error\');})">ลองอีกครั้ง</button></div>';
+      onErr(err);
+    }, SHEET_RESEARCH_GID);
+  },
+
+  setupFilterOptions(){
+    const yearSel = document.getElementById('research-year');
+    if(yearSel.options.length <= 1){
+      const years = [...new Set(this.all.map(r=>r.year).filter(Boolean))].sort((a,b)=>b-a);
+      years.forEach(y => {
+        const o = document.createElement('option'); o.value = y; o.textContent = 'พ.ศ. ' + y; yearSel.appendChild(o);
+      });
+    }
+    const issueSel = document.getElementById('research-issue');
+    if(issueSel.options.length <= 1){
+      const counts = {};
+      this.all.forEach(r => r.issueTags.forEach(t => counts[t] = (counts[t]||0)+1));
+      Object.keys(counts).sort((a,b)=>counts[b]-counts[a]).forEach(tag => {
+        const o = document.createElement('option'); o.value = tag; o.textContent = tag + ' (' + counts[tag] + ')'; issueSel.appendChild(o);
+      });
+    }
+    const typeSel = document.getElementById('research-type');
+    if(typeSel.options.length <= 1){
+      [...new Set(this.all.map(r=>r.type))].forEach(t => {
+        const o = document.createElement('option'); o.value = t; o.textContent = t; typeSel.appendChild(o);
+      });
+    }
+  },
+
+  applyFilters(){
+    if(!this.loaded) return;
+    const year = document.getElementById('research-year').value;
+    const issue = document.getElementById('research-issue').value;
+    const type = document.getElementById('research-type').value;
+    const q = document.getElementById('research-search').value.trim().toLowerCase();
+    this.filtered = this.all.filter(r => {
+      if(year !== 'all' && r.year !== year) return false;
+      if(issue !== 'all' && !r.issueTags.includes(issue)) return false;
+      if(type !== 'all' && r.type !== type) return false;
+      if(q && !(r.title.toLowerCase().includes(q) || r.author.toLowerCase().includes(q) || r.keywords.join(' ').toLowerCase().includes(q) || r.summary.toLowerCase().includes(q))) return false;
+      return true;
+    });
+    this.page = 1;
+    this.renderCharts();
+    this.renderList();
+  },
+
+  renderCharts(){
+    const issueCounts = {};
+    this.filtered.forEach(r => r.issueTags.forEach(t => { issueCounts[t] = (issueCounts[t]||0)+1; }));
+    const topIssues = Object.entries(issueCounts).sort((a,b)=>b[1]-a[1]).slice(0,10);
+    const yearCounts = {};
+    this.filtered.forEach(r => { if(r.year) yearCounts[r.year] = (yearCounts[r.year]||0)+1; });
+    const years = Object.keys(yearCounts).sort((a,b)=>a-b);
+
+    if(this.charts.issue){
+      this.charts.issue.data.labels = topIssues.map(p=>p[0]);
+      this.charts.issue.data.datasets[0].data = topIssues.map(p=>p[1]);
+      this.charts.issue.update('none');
+    } else {
+      this.charts.issue = new Chart(document.getElementById('researchIssueChart').getContext('2d'), {
+        type:'bar',
+        data:{ labels: topIssues.map(p=>p[0]), datasets:[{ data: topIssues.map(p=>p[1]), backgroundColor:'#DB2777', borderRadius:6 }] },
+        options:{ responsive:true, maintainAspectRatio:false, indexAxis:'y', plugins:{legend:{display:false}}, scales:{x:{beginAtZero:true,ticks:{precision:0}}} }
+      });
+    }
+    if(this.charts.year){
+      this.charts.year.data.labels = years.map(y=>'พ.ศ. '+y);
+      this.charts.year.data.datasets[0].data = years.map(y=>yearCounts[y]);
+      this.charts.year.update('none');
+    } else {
+      this.charts.year = new Chart(document.getElementById('researchYearChart').getContext('2d'), {
+        type:'line',
+        data:{ labels: years.map(y=>'พ.ศ. '+y), datasets:[{ data: years.map(y=>yearCounts[y]), borderColor:'#7C3AED', backgroundColor:'rgba(124,58,237,.15)', fill:true, tension:.3, pointRadius:3 }] },
+        options:{ responsive:true, maintainAspectRatio:false, plugins:{legend:{display:false}}, scales:{y:{beginAtZero:true,ticks:{precision:0}}} }
+      });
+    }
+  },
+
+  updateOverviewKPIs(){
+    document.getElementById('kr-total').textContent = this.all.length;
+    const years = this.all.map(r=>r.year).filter(Boolean).sort((a,b)=>a-b);
+    document.getElementById('kr-year-range').textContent = years.length ? ('พ.ศ. ' + years[0] + ' - ' + years[years.length-1]) : 'ไม่มีข้อมูลปี';
+    const issueSet = new Set();
+    this.all.forEach(r => r.issueTags.forEach(t => issueSet.add(t)));
+    document.getElementById('kr-issues').textContent = issueSet.size;
+    const applied = this.all.filter(r=>r.type.includes('ประยุกต์')).length;
+    const basic = this.all.filter(r=>r.type.includes('พื้นฐาน')).length;
+    document.getElementById('kr-applied').textContent = applied;
+    document.getElementById('kr-applied-pct').textContent = 'คิดเป็นสัดส่วน ' + (this.all.length? Math.round(applied/this.all.length*100):0) + '%';
+    document.getElementById('kr-basic').textContent = basic;
+    document.getElementById('kr-basic-pct').textContent = 'คิดเป็นสัดส่วน ' + (this.all.length? Math.round(basic/this.all.length*100):0) + '%';
+  },
+
+  renderList(){
+    document.getElementById('research-result-count').textContent = 'พบ ' + this.filtered.length + ' งานวิจัย จากทั้งหมด ' + this.all.length + ' งานวิจัย';
+    const totalPages = Math.max(1, Math.ceil(this.filtered.length / this.pageSize));
+    if(this.page > totalPages) this.page = totalPages;
+    const start = (this.page - 1) * this.pageSize;
+    const pageItems = this.filtered.slice(start, start + this.pageSize);
+    const list = document.getElementById('researchList');
+    if(pageItems.length === 0){
+      list.innerHTML = '<div class="empty-state">ไม่พบงานวิจัยที่ตรงเงื่อนไขการค้นหา</div>';
+    } else {
+      list.innerHTML = pageItems.map(r => {
+        const typeClass = r.type.includes('พื้นฐาน') ? 'basic' : '';
+        const topRow = `
+            <div class="case-top-row">
+              <span class="report-no">${r.year ? 'พ.ศ. ' + r.year : 'ไม่ระบุปี'}</span>
+              <span class="type-badge ${typeClass}">${r.type}</span>
+            </div>
+            <h5>${r.title}</h5>
+            <div class="case-meta">
+              ${r.author ? '<span>✍️ ' + r.author + '</span>' : ''}
+              ${r.issueTags.map(t => '<span>🏷️ ' + t + '</span>').join('')}
+            </div>`;
+        if(r.reportUrl){
+          // มีลิงก์รายงานฉบับเต็ม — คลิกที่กล่องทั้งใบเพื่อเปิดรายงานในแท็บใหม่ได้ทันที
+          return `
+        <a class="case-card research-link" href="${r.reportUrl}" target="_blank" rel="noopener">
+          ${topRow}
+          <div class="report-link-hint">📄 อ่านรายงานฉบับเต็ม ↗</div>
+        </a>
+      `;
+        }
+        return `
+        <details class="case-card">
+          <summary>
+            ${topRow}
+          </summary>
+          <div class="case-detail">
+            <dl>
+              <dt>วิธีการดำเนินการ</dt><dd>${r.method || '-'}</dd>
+              <dt>ระเบียบวิธีการวิจัย</dt><dd>${r.methodology || '-'}</dd>
+              <dt>สาระสำคัญ</dt><dd>${r.summary || '-'}</dd>
+              <dt>คำสำคัญ</dt><dd>${r.keywords.join(', ') || '-'}</dd>
+            </dl>
+          </div>
+        </details>
+      `;
+      }).join('');
+    }
+    document.getElementById('researchPagination').innerHTML = `
+      <button ${this.page<=1?'disabled':''} onclick="researchExplorer.goPage(${this.page-1})">← ก่อนหน้า</button>
+      <span class="page-info">หน้า ${this.page} / ${totalPages}</span>
+      <button ${this.page>=totalPages?'disabled':''} onclick="researchExplorer.goPage(${this.page+1})">ถัดไป →</button>
+    `;
+  },
+  goPage(p){ this.page = p; this.renderList(); }
 };
 
 /* ---------- Boot ---------- */
