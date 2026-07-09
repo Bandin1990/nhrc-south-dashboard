@@ -239,7 +239,7 @@ a.case-card.research-link:hover .report-link-hint{text-decoration:underline;}
     <button class="tab-btn active" data-tab="network" onclick="app.switchTab('network')">เครือข่ายความเชื่อมโยง <span class="live-dot"></span></button>
     <button class="tab-btn" data-tab="overview" onclick="app.switchTab('overview')">โจทย์วิจัย <span class="live-dot"></span></button>
     <button class="tab-btn" data-tab="cases" onclick="app.switchTab('cases')">ฐานข้อมูลกรณีตรวจสอบ <span class="live-dot"></span></button>
-    <button class="tab-btn" data-tab="matrix" onclick="app.switchTab('matrix')">สถานการณ์สิทธิมนุษยชนรายประเด็น <span class="live-dot"></span></button>
+    <button class="tab-btn" data-tab="matrix" onclick="app.switchTab('matrix')">สถานการณ์สิทธิมนุษยชน <span class="live-dot"></span></button>
     <button class="tab-btn" data-tab="research" onclick="app.switchTab('research')">งานวิจัยของ กสม. <span class="live-dot"></span></button>
   </nav>
 
@@ -333,7 +333,7 @@ a.case-card.research-link:hover .report-link-hint{text-decoration:underline;}
     </section>
 
     <section class="cards-section">
-      <h3>ตารางสถานการณ์สิทธิมนุษยชนรายประเด็น (2564-2568)</h3>
+      <h3>ตารางสถานการณ์สิทธิมนุษยชน (2564-2568)</h3>
       <div class="toolbar">
         <select id="matrix-category" onchange="matrixExplorer.applyFilters()"><option value="all">ทุกหมวดหมู่</option></select>
         <select id="matrix-trend" onchange="matrixExplorer.applyFilters()">
@@ -553,7 +553,7 @@ const app = {
 const networkExplorer = {
   network: null,
   render() {
-    if (!caseExplorer.loaded || !topicsExplorer.loaded || !matrixExplorer.loaded) return;
+    if (!caseExplorer.loaded || !topicsExplorer.loaded || !matrixExplorer.loaded || !researchExplorer.loaded) return;
     document.getElementById('network-sync-banner').innerHTML = '';
 
     const nodesMap = new Map();
@@ -561,9 +561,9 @@ const networkExplorer = {
 
     const addNode = (id, label, group, size, color, fontColor) => {
       if (!nodesMap.has(id)) {
-        nodesMap.set(id, { id, label, group, value: size, color: { background: color, border: color }, originalColor: color, font: { color: '#1f2937', strokeWidth: 3, strokeColor: '#ffffff' } });
+        nodesMap.set(id, { id, label, group, value: size, color: { background: color, border: color }, originalColor: color, font: { color: fontColor || '#1f2937', strokeWidth: 3, strokeColor: '#ffffff' } });
       } else {
-        nodesMap.get(id).value += size;
+        nodesMap.get(id).value += (size * 0.2); // Increment size slightly for repeated nodes
       }
     };
 
@@ -581,42 +581,120 @@ const networkExplorer = {
     const issueToCluster = {};
     matrixExplorer.all.forEach(m => { 
       issueToCluster[m.name] = m.category; 
-      const color = matrixExplorer.categoryColors[m.category] || '#7C3AED';
-      addNode(m.category, m.category, 'cluster', 10, color, '#fff');
-      addEdge('root', m.category, 5);
-      addNode(m.name, m.name, 'issue', 5, '#f3f4f6', '#374151');
-      addEdge(m.category, m.name, 2);
     });
 
+    const fallbackClusterMap = {
+      'กระบวนการยุติธรรม': 'สิทธิพลเมืองและสิทธิทางการเมือง',
+      'การทรมาน/บังคับสูญหาย': 'สิทธิพลเมืองและสิทธิทางการเมือง',
+      'นักปกป้องสิทธิมนุษยชน/SLAPP': 'สิทธิพลเมืองและสิทธิทางการเมือง',
+      'เสรีภาพชุมนุม/แสดงออก/สื่อ': 'สิทธิพลเมืองและสิทธิทางการเมือง',
+      'การมีส่วนร่วมทางการเมือง/เลือกตั้ง': 'สิทธิพลเมืองและสิทธิทางการเมือง',
+      'เสรีภาพทางศาสนา': 'สิทธิพลเมืองและสิทธิทางการเมือง',
+      'สถานการณ์ชายแดนใต้': 'สิทธิพลเมืองและสิทธิทางการเมือง',
+      
+      'สิทธิแรงงาน': 'สิทธิทางเศรษฐกิจ สังคม และวัฒนธรรม',
+      'สิทธิสุขภาพ/สาธารณสุข': 'สิทธิทางเศรษฐกิจ สังคม และวัฒนธรรม',
+      'สิทธิการศึกษา': 'สิทธิทางเศรษฐกิจ สังคม และวัฒนธรรม',
+      'คนจนเมือง/ที่อยู่อาศัย': 'สิทธิทางเศรษฐกิจ สังคม และวัฒนธรรม',
+      'การค้ามนุษย์': 'สิทธิทางเศรษฐกิจ สังคม และวัฒนธรรม',
+      'ธุรกิจกับสิทธิมนุษยชน': 'สิทธิทางเศรษฐกิจ สังคม และวัฒนธรรม',
+    
+      'ที่ดิน/ทรัพยากรธรรมชาติ': 'สิทธิชุมชนและสิ่งแวดล้อม',
+      'สิ่งแวดล้อมและ EIA': 'สิทธิชุมชนและสิ่งแวดล้อม',
+      'สิทธิชุมชน': 'สิทธิชุมชนและสิ่งแวดล้อม',
+    
+      'สิทธิผู้ต้องขัง': 'สิทธิของกลุ่มบุคคลเฉพาะ',
+      'สิทธิเด็ก': 'สิทธิของกลุ่มบุคคลเฉพาะ',
+      'สิทธิผู้สูงอายุ': 'สิทธิของกลุ่มบุคคลเฉพาะ',
+      'สิทธิคนพิการ': 'สิทธิของกลุ่มบุคคลเฉพาะ',
+      'สิทธิสตรี/ความเสมอภาคทางเพศ': 'สิทธิของกลุ่มบุคคลเฉพาะ',
+      'ไร้รัฐ/ไร้สัญชาติ': 'สิทธิของกลุ่มบุคคลเฉพาะ',
+      'สิทธิกลุ่มชาติพันธุ์': 'สิทธิของกลุ่มบุคคลเฉพาะ'
+    };
+
+    // Helper to get main cluster
+    const getCluster = (tag) => {
+       return issueToCluster[tag] || fallbackClusterMap[tag] || 'ประเด็นย่อยอื่นๆ';
+    };
+
+    const mainClusterColors = {
+      'สิทธิพลเมืองและสิทธิทางการเมือง': '#2563EB',
+      'สิทธิทางเศรษฐกิจ สังคม และวัฒนธรรม': '#D97706',
+      'สิทธิชุมชนและสิ่งแวดล้อม': '#059669',
+      'สิทธิของกลุ่มบุคคลเฉพาะ': '#DB2777',
+      'ประเด็นย่อยอื่นๆ': '#6B7280'
+    };
+
+    // Ensure main clusters and issues from matrix exist
+    matrixExplorer.all.forEach(m => { 
+      const cluster = m.category;
+      const clusterColor = mainClusterColors[cluster] || '#7C3AED';
+      addNode(cluster, cluster, 'cluster', 15, clusterColor, '#fff');
+      addEdge('root', cluster, 5);
+      addNode(m.name, m.name, 'issue', 8, '#f3f4f6', '#374151');
+      addEdge(cluster, m.name, 2);
+    });
+
+    // 1. Process Topics (โจทย์วิจัย)
     topicsExplorer.all.forEach(t => {
-      const c = t.cluster;
-      const color = topicsExplorer.clusterColors[c] || '#7C3AED';
-      addNode(c, c, 'cluster', 10, color, '#fff');
-      addEdge('root', c, 5);
-      if (t.issue) {
-        addNode(t.issue, t.issue, 'issue', 5, '#f3f4f6', '#374151');
-        addEdge(c, t.issue, 2);
-      }
+      const tag = t.issue || 'อื่นๆ/ไม่ระบุหมวด';
+      const cluster = getCluster(tag);
+      const clusterColor = mainClusterColors[cluster] || '#7C3AED';
+      addNode(cluster, cluster, 'cluster', 15, clusterColor, '#fff');
+      addEdge('root', cluster, 1);
+      addNode(tag, tag, 'issue', 8, '#f3f4f6', '#374151');
+      addEdge(cluster, tag, 1);
+      
+      const tNodeId = 'topic_' + t.num;
+      const shortTitle = t.title.length > 25 ? t.title.substring(0, 25) + '...' : t.title;
+      addNode(tNodeId, "🎯 " + shortTitle, 'topic', 4, '#fef3c7', '#b45309');
+      addEdge(tag, tNodeId, 1);
     });
 
+    // 2. Process Cases (พื้นที่, กลุ่มคน)
     caseExplorer.all.forEach(c => {
       c.issueTags.forEach(tag => {
-        let cluster = issueToCluster[tag];
-        if (!cluster) {
-          cluster = 'ประเด็นย่อยอื่นๆ';
-          addNode(cluster, cluster, 'cluster', 5, '#9ca3af', '#fff');
-          addEdge('root', cluster, 1);
-        }
-        addNode(tag, tag, 'issue', 3, '#f3f4f6', '#374151');
+        const cluster = getCluster(tag);
+        const clusterColor = mainClusterColors[cluster] || '#7C3AED';
+        addNode(cluster, cluster, 'cluster', 15, clusterColor, '#fff');
+        addEdge('root', cluster, 1);
+        addNode(tag, tag, 'issue', 8, '#f3f4f6', '#374151');
         addEdge(cluster, tag, 1);
 
+        // พื้นที่
         if (c.area) {
           const matchedProvinces = SOUTH_PROVINCES.filter(p => c.area.includes(p));
           matchedProvinces.forEach(prov => {
-            addNode(prov, prov, 'area', 2, '#fee2e2', '#991b1b');
+            addNode(prov, "📍 " + prov, 'area', 4, '#fee2e2', '#991b1b');
             addEdge(tag, prov, 1);
           });
         }
+        
+        // กลุ่มคน (Victims)
+        if (c.victims) {
+           let victimLabel = c.victims;
+           if (victimLabel.length > 20) victimLabel = victimLabel.substring(0, 20) + '...';
+           const vNodeId = 'vic_' + victimLabel;
+           addNode(vNodeId, "👥 " + victimLabel, 'victim', 4, '#dbeafe', '#1d4ed8');
+           addEdge(tag, vNodeId, 1);
+        }
+      });
+    });
+
+    // 3. Process Research (งานวิจัย)
+    researchExplorer.all.forEach(r => {
+      r.issueTags.forEach(tag => {
+        const cluster = getCluster(tag);
+        const clusterColor = mainClusterColors[cluster] || '#7C3AED';
+        addNode(cluster, cluster, 'cluster', 15, clusterColor, '#fff');
+        addEdge('root', cluster, 1);
+        addNode(tag, tag, 'issue', 8, '#f3f4f6', '#374151');
+        addEdge(cluster, tag, 1);
+
+        const rNodeId = 'research_' + r.id;
+        const shortTitle = r.title.length > 25 ? r.title.substring(0, 25) + '...' : r.title;
+        addNode(rNodeId, "📚 " + shortTitle, 'research', 4, '#fdf2f8', '#be185d');
+        addEdge(tag, rNodeId, 1);
       });
     });
 
